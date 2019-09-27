@@ -11,12 +11,9 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 
 # ========== Config ==================
 path = "path/to/lec/pdf"
-path = r"D:\OneDrive - LOSA\1_课业\EM-Electric_Mechanics/"
 ignore_files = [
-    "pdf_that_u_don't_want_to_filtrate.pdf",
-    "0_电动力学学习辅导.pdf",
-    "1.1_电动力学电场p.pdf",
-    "2.1_静电场的标势.pdf"
+    "pdf_that_u_don't_want_to_filtrate1.pdf",
+    "pdf_that_u_don't_want_to_filtrate2.pdf"
 ]
 # ====================================
 

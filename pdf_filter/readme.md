@@ -18,3 +18,5 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 ## 补充
 
 文件写了两个版本, 两者过滤pdf的思路是不一样的.
+
+> 如果觉得有帮助就点个star呗
