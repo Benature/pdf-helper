@@ -2,10 +2,12 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 import sys
 
 # 两种使用方法
-if sys.argv:
-    filename = sys.argv[0]  # 命令行敲`python3 latex_pdf_filter.py ./chp11.pdf`即可
+if len(sys.argv) > 1:
+    filename = sys.argv[1]  # 命令行敲`python3 latex_pdf_filter.py ./chp11`即可
+    if '.pdf' != filename[-4:]:
+        filename += '.pdf'
 else:
-    filename = "./chp11.pdf"  # 自己改相应的文件名
+    filename = "./chp01 2.pdf"  # 自己改相应的文件名
 
 
 def getPdfIndex(filename):
