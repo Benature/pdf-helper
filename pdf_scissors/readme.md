@@ -14,3 +14,9 @@ cropped_pages.append(page.crop([w / 2, 0, w, h]))
 <p align="center">
   <img src="demo.png" width="70%"/>
 </p>
+
+>注意：处理后的 pdf 将丢失对文本的选中能力，因为处理方式是转图片后切割再拼接的。如希望选中文本，可以使用 Acrobat👇
+
+<p align="center">
+  <img src="acrobat.png" width="60%"/>
+</p>
