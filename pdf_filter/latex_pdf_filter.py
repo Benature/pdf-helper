@@ -7,7 +7,7 @@ if len(sys.argv) > 1:
     if '.pdf' != filename[-4:]:
         filename += '.pdf'
 else:
-    filename = "./chp01 2.pdf"  # 自己改相应的文件名
+    filename = "./chp01.pdf"  # 自己改相应的文件名
 
 
 def getPdfIndex(filename):
