@@ -9,6 +9,10 @@ import re
 # sys.setdefaultencoding('utf-8')
 
 
+def log(typ, info, more='', index=''):
+    print(f"<{typ}> {info} | line{index+1:<4} [{more}]")
+
+
 class PDFHandleMode(object):
     '''
     处理PDF文件的模式
@@ -75,8 +79,6 @@ class MyPDFHandler(object):
         '''
         bm = self.__writeable_pdf.addBookmark(
             title, page - 1, parent=parent, color=color, fit=fit)
-        print(
-            'add_one_bookmark success! with bookmark title: {0}'.format(title))
         return bm
 
     def add_bookmarks(self, bookmarks, max_parent):
@@ -105,17 +107,17 @@ class MyPDFHandler(object):
         bookmarks = []
         max_parent = 0
         with open(txt_file_path, 'r') as fin:
-            for line in fin:
+            for i, line in enumerate(fin):
                 line = line.rstrip()
                 if not line:
                     continue
                 # 以'@'作为标题、页码分隔符
-                print('read line is: {0}'.format(line))
+                # print('read line is: {0}'.format(line))
                 try:
                     title = line.split('@')[0].rstrip()
                     page = line.split('@')[1].strip()
                 except IndexError as msg:
-                    print('<ERROR>', msg)
+                    log('ERROR', msg, line, i)
                     continue
                 # title和page都不为空才添加书签，否则不添加
                 if title and page:
@@ -124,10 +126,17 @@ class MyPDFHandler(object):
                         max_parent = index
                     try:
                         page = int(page) + page_offset
+                        if title.strip().count(' ') > 1:
+                            if re.search(r"[a-zA-z]", line):
+                                if title.strip().count(' ') > 2:
+                                    log('WARN', 'seems too many blanks', line, i)
+                            else:
+                                log('WARN', 'seems too many blanks', line, i)
                         bookmarks.append((title.strip(), page, index))
                     except ValueError as msg:
-                        print('<ERROR>', msg)
-
+                        log('ERROR', msg, line, i)
+                else:
+                    log('WARN', 'skip line', line, i)
         return bookmarks, max_parent
 
     def add_bookmarks_by_read_txt(self, txt_file_path, page_offset=0):

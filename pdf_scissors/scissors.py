@@ -2,7 +2,7 @@ import io
 from pdf2image import convert_from_path
 import img2pdf
 
-file_path = "/Users/benature/OneDrive - LOSA/3_Project/1_QuantumMetrology/Reference/(Mathematics in Science and Engineering 123) Carl W. Helstrom (Eds.) - Quantum Detection and Estimation Theory-Elsevier, Academic Press (1976).pdf"
+file_path = "book.pdf"
 output_path = 'test.pdf'
 
 

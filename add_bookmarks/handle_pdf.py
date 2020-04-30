@@ -9,8 +9,8 @@ import configparser
 
 def main():
     # 从配置文件中读取配置信息
-    cf = configparser.SafeConfigParser()
-    cf.read('./info.conf')
+    cf = configparser.ConfigParser()
+    cf.read('./bookmarks/0_info.conf')
     pdf_path = cf.get('info', 'pdf_path')
     bookmark_file_path = cf.get('info', 'bookmark_file_path')
     page_offset = cf.getint('info', 'page_offset')
