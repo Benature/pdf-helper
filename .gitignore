@@ -1,5 +1,6 @@
 **/__pycache__/
+**/*_ig.*
 
 /test/
-/add_bookmarks/bookmarks
-/add_bookmarks/output
+/bookmarks/bookmarks
+/bookmarks/output

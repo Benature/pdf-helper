@@ -3,7 +3,9 @@
 ## 好帮手清单
 
 - [散装 PDF 过滤过渡页——直捣黄龙](./pdf_filter)
-- [批量增加书签](./add_bookmarks)
+- [书签处理](./bookmarks)
+  - 书签导出
+  - 批量增加书签
 - [PDF 页面切割](./pdf_scissors)
 
 > 如果觉得有帮助就点个star呗

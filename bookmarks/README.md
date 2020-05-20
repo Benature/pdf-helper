@@ -1,4 +1,12 @@
-# 批量导入书签
+# 书签操作
+
+## 导出书签
+
+refer in [`get_bookmarks.py`](./get_bookmarks.py)
+
+## 批量导入书签
+
+refer in [`add_bookmarks.py`](./add_bookmarks.py)
 
 代码可谓是[“抄大佬”](https://www.jianshu.com/p/1aac3ae4d620)的，我主要改了以下地方：
 

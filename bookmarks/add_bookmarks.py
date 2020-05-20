@@ -1,10 +1,5 @@
-# coding:utf-8
-# 添加PDF书签
-from pdf_utils import MyPDFHandler, PDFHandleMode as mode
+from utils import MyPDFHandler, PDFHandleMode as mode
 import configparser
-# import sys
-# reload(sys)
-# sys.setdefaultencoding('utf-8')
 
 
 def main():

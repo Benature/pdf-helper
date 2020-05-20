@@ -20,6 +20,12 @@ def log(typ, info, more='', index=''):
         f"{typ} {info} | line\033[1;36m{index+1:<4}\033[0m \033[1;44m{more} \033[0m")
 
 
+def path_split(file_path):
+    file_folder, file_name = os.path.split(file_path)
+    file_name, ext = os.path.splitext(file_name)
+    return file_folder, file_name, ext
+
+
 class PDFHandleMode(object):
     '''
     处理PDF文件的模式
