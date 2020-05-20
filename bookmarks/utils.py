@@ -3,6 +3,9 @@
 from PyPDF2 import PdfFileReader as reader, PdfFileWriter as writer
 import os
 import re
+import subprocess
+from platform import system
+
 
 # import sys
 # reload(sys)
@@ -24,6 +27,14 @@ def path_split(file_path):
     file_folder, file_name = os.path.split(file_path)
     file_name, ext = os.path.splitext(file_name)
     return file_folder, file_name, ext
+
+
+def open_pdf(file_path):
+    SYSTEM = system()
+    if SYSTEM == 'Darwin':
+        subprocess.call(f'open {file_path}', shell=True)
+    else:
+        log('WARN', '目前仅支持在 macOS 自动打开 pdf')
 
 
 class PDFHandleMode(object):
@@ -127,7 +138,7 @@ class MyPDFHandler(object):
                 # 以'@'作为标题、页码分隔符
                 # print('read line is: {0}'.format(line))
                 try:
-                    title = line.split('@')[0].rstrip()
+                    title = line.split('@')[0].rstrip().replace('\t', '    ')
                     page = line.split('@')[1].strip()
                 except IndexError as msg:
                     log('ERROR', msg, line, i)
