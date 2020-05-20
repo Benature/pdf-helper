@@ -10,7 +10,14 @@ import re
 
 
 def log(typ, info, more='', index=''):
-    print(f"<{typ}> {info} | line{index+1:<4} [{more}]")
+    if typ == 'WARN':
+        typ = f"\033[1;33m<{typ}>\033[0m"
+    elif typ == 'ERROR':
+        typ = f"\033[1;31m<{typ}>\033[0m"
+    else:
+        typ = f"<{typ}>"
+    print(
+        f"{typ} {info} | line\033[1;36m{index+1:<4}\033[0m \033[1;44m{more} \033[0m")
 
 
 class PDFHandleMode(object):
