@@ -1,8 +1,6 @@
-from utils import PDFHandler, PDFHandleMode as mode
-from utils import open_pdf
-from utils import root_path, check_conf_file, conf_path
+from utils import PDFHandler, open_pdf, check_conf_file
+from utils import root_path, conf_path
 import configparser
-import os
 import re
 from pathlib import Path
 
@@ -28,7 +26,7 @@ def main():
                                fallback=root_path / 'output' / pdf_path.name)
 
     # operate pdf bookmarks
-    pdf_handler = PDFHandler(pdf_path, mode=mode.NEWLY)
+    pdf_handler = PDFHandler(pdf_path, 'newly')
     pdf_handler.add_bookmarks_by_read_txt(bookmark_file_path,
                                           page_offset=page_offset)
     pdf_handler.save(new_pdf_file_path)

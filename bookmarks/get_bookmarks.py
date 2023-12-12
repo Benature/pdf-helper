@@ -3,7 +3,7 @@ import configparser
 import os
 from pathlib import Path
 
-from utils import path_split, check_conf_file, conf_path
+from utils import check_conf_file, conf_path
 
 
 def bookmark_dict(bookmark_list):
@@ -37,6 +37,5 @@ if __name__ == '__main__':
     reader = PdfFileReader(file_path)
     bookmarks = bookmark_dict(reader.getOutlines())
 
-    _, file_name, _ = path_split(file_path)
     with open(os.path.join('bookmarks', file_path.stem + '.txt'), 'w') as f:
         f.write(write_bookmark(bookmarks))

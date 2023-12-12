@@ -1,6 +1,5 @@
 # coding:utf-8
-# 封装的PDF文档处理工具
-from PyPDF2 import PdfFileReader as reader, PdfFileWriter as writer
+from PyPDF2 import PdfFileReader, PdfFileWriter
 import os
 import re
 import subprocess
@@ -20,22 +19,16 @@ def check_conf_file():
     log("ERROR", "似乎还未设置好配置文件")
 
 
-def log(typ, info, more='', index=0):
+def log(typ, info, more='', index=None):
     if typ == 'WARN':
         typ = f"\033[1;33m<{typ}>\033[0m"
     elif typ == 'ERROR':
         typ = f"\033[1;31m<{typ}>\033[0m"
     else:
         typ = f"<{typ}>"
-    print(
-        f"{typ} {info} | line\033[1;36m{index+1:<4}\033[0m \033[1;44m{more} \033[0m"
-    )
 
-
-def path_split(file_path):
-    file_folder, file_name = os.path.split(file_path)
-    file_name, ext = os.path.splitext(file_name)
-    return file_folder, file_name, ext
+    line_info = f"line\033[1;36m{index+1:<4}\033[0m" if index is not None else ""
+    print(f"{typ} {info} | {line_info} \033[1;44m{more} \033[0m")
 
 
 def open_pdf(file_path):
@@ -48,29 +41,19 @@ def open_pdf(file_path):
         log('WARN', '目前仅支持在 macOS 自动打开 pdf')
 
 
-class PDFHandleMode(object):
-    '''
-    处理PDF文件的模式
-    '''
-    # 保留源PDF文件的所有内容和信息，在此基础上修改
-    COPY = 'copy'
-    # 仅保留源PDF文件的页面内容，在此基础上修改
-    NEWLY = 'newly'
-
-
 class PDFHandler(object):
     '''
     封装的PDF文件处理类
     '''
 
-    def __init__(self, pdf_file_path, mode=PDFHandleMode.COPY):
+    def __init__(self, pdf_file_path, mode='copy'):
         '''
         用一个PDF文件初始化
         :param pdf_file_path: PDF文件路径
         :param mode: 处理PDF文件的模式，默认为PDFHandleMode.COPY模式
         '''
         # 只读的PDF对象
-        self.__pdf = reader(pdf_file_path)
+        self.__pdf = PdfFileReader(pdf_file_path)
 
         # 获取PDF文件名（不带路径）
         self.file_name = os.path.basename(pdf_file_path)
@@ -82,10 +65,10 @@ class PDFHandler(object):
         self.pages_num = self.__pdf.getNumPages()
 
         # 可写的PDF对象，根据不同的模式进行初始化
-        self.__writeable_pdf = writer()
-        if mode == PDFHandleMode.COPY:
+        self.__writeable_pdf = PdfFileWriter()
+        if mode == 'copy':  # 保留源PDF文件的所有内容和信息，在此基础上修改
             self.__writeable_pdf.cloneDocumentFromReader(self.__pdf)
-        elif mode == PDFHandleMode.NEWLY:
+        elif mode == 'newly':  # 仅保留源PDF文件的页面内容，在此基础上修改
             for idx in range(self.pages_num):
                 page = self.__pdf.getPage(idx)
                 self.__writeable_pdf.insertPage(page, idx)
