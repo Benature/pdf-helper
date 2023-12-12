@@ -1,18 +1,16 @@
 from utils import PDFHandler, PDFHandleMode as mode
 from utils import path_split, open_pdf
+from utils import root_path, check_conf_file, conf_path
 import configparser
 import os
 import re
-from pathlib import Path
-
-root_path = Path(__file__).resolve().parent
 
 
 def main():
     cf = configparser.ConfigParser()  # config
 
     # ATTENTION: 您可能需要修改这里的路径
-    cf.read(root_path / 'bookmarks/0_info.conf')
+    cf.read(conf_path)
 
     # read config
     pdf_path = cf.get('add', 'pdf_path')
@@ -45,4 +43,5 @@ def main():
 
 
 if __name__ == '__main__':
+    check_conf_file()
     main()

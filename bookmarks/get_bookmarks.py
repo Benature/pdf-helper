@@ -2,7 +2,7 @@ from PyPDF2 import PdfFileReader
 import configparser
 import os
 
-from utils import path_split
+from utils import path_split, check_conf_file, conf_path
 
 
 def bookmark_dict(bookmark_list):
@@ -26,10 +26,10 @@ def write_bookmark(bookmarks):
 
 
 if __name__ == '__main__':
+    check_conf_file()
     cf = configparser.ConfigParser()
 
-    # ATTENTION: 您可能需要修改这里的路径
-    cf.read('./bookmarks/0_info.conf')
+    cf.read(conf_path)
 
     file_path = cf.get('get', 'pdf_path')
 

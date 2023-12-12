@@ -5,9 +5,22 @@ import os
 import re
 import subprocess
 from platform import system
+from pathlib import Path
+
+root_path = Path(__file__).resolve().parent
+conf_path = root_path / 'info.conf'
 
 
-def log(typ, info, more='', index=''):
+def check_conf_file():
+    """检查配置文件是否存在"""
+    if os.path.exists(conf_path):
+        return True
+    from shutil import copyfile
+    copyfile(root_path / 'info_sample.conf', conf_path)
+    log("ERROR", "似乎还未设置好配置文件")
+
+
+def log(typ, info, more='', index=0):
     if typ == 'WARN':
         typ = f"\033[1;33m<{typ}>\033[0m"
     elif typ == 'ERROR':
