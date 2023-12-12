@@ -25,21 +25,19 @@ def main():
             print(f"Read from bookmark meta: {bm_meta[0]}")
             page_offset = bm_cf.getint('meta', 'offset')
 
-    new_pdf_file_name = cf.get('add',
-                               'new_pdf_file_name',
-                               fallback=(os.path.join(
-                                   'output',
-                                   path_split(pdf_path)[1] + '.pdf')))
+    new_pdf_file_path = cf.get(
+        'add',
+        'new_pdf_file_name',
+        fallback=root_path / 'output' / path_split(pdf_path)[1] + '.pdf')
 
     # operate pdf bookmarks
     pdf_handler = PDFHandler(pdf_path, mode=mode.NEWLY)
     pdf_handler.add_bookmarks_by_read_txt(bookmark_file_path,
                                           page_offset=page_offset)
-    pdf_handler.save2file(new_pdf_file_name)
+    pdf_handler.save(new_pdf_file_path)
 
     if cf.getboolean('add', 'auto_open', fallback=False):
-        print(new_pdf_file_name)
-        open_pdf(new_pdf_file_name)
+        open_pdf(new_pdf_file_path)
 
 
 if __name__ == '__main__':

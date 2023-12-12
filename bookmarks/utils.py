@@ -90,16 +90,19 @@ class PDFHandler(object):
                 page = self.__pdf.getPage(idx)
                 self.__writeable_pdf.insertPage(page, idx)
 
-    def save2file(self, new_file_name):
+    def save(self, new_file_path):
         '''
         将修改后的PDF保存成文件
-        :param new_file_name: 新文件名，不要和原文件名相同
+        :param new_file_name: 新文件名
         :return: None
         '''
-        # 保存修改后的PDF文件内容到文件中
-        with open(new_file_name, 'wb') as fout:
-            self.__writeable_pdf.write(fout)
-        print('save2file success! new file is: {0}'.format(new_file_name))
+        if not isinstance(new_file_path, Path):
+            new_file_path = Path(new_file_path)
+        # make sure the directory exists
+        new_file_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(new_file_path, 'wb') as f:
+            self.__writeable_pdf.write(f)
+        print(f'Save to new file: {new_file_path}')
 
     def add_one_bookmark(self,
                          title,
