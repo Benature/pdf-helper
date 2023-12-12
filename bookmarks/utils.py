@@ -7,11 +7,6 @@ import subprocess
 from platform import system
 
 
-# import sys
-# reload(sys)
-# sys.setdefaultencoding('utf-8')
-
-
 def log(typ, info, more='', index=''):
     if typ == 'WARN':
         typ = f"\033[1;33m<{typ}>\033[0m"
@@ -20,7 +15,8 @@ def log(typ, info, more='', index=''):
     else:
         typ = f"<{typ}>"
     print(
-        f"{typ} {info} | line\033[1;36m{index+1:<4}\033[0m \033[1;44m{more} \033[0m")
+        f"{typ} {info} | line\033[1;36m{index+1:<4}\033[0m \033[1;44m{more} \033[0m"
+    )
 
 
 def path_split(file_path):
@@ -32,7 +28,9 @@ def path_split(file_path):
 def open_pdf(file_path):
     SYSTEM = system()
     if SYSTEM == 'Darwin':
-        subprocess.call(f'open {file_path}', shell=True)
+        cmd = f'open "{file_path}"'
+        print(cmd)
+        subprocess.call(cmd, shell=True)
     else:
         log('WARN', '目前仅支持在 macOS 自动打开 pdf')
 
@@ -47,7 +45,7 @@ class PDFHandleMode(object):
     NEWLY = 'newly'
 
 
-class MyPDFHandler(object):
+class PDFHandler(object):
     '''
     封装的PDF文件处理类
     '''
@@ -90,7 +88,12 @@ class MyPDFHandler(object):
             self.__writeable_pdf.write(fout)
         print('save2file success! new file is: {0}'.format(new_file_name))
 
-    def add_one_bookmark(self, title, page, parent=None, color=None, fit='/Fit'):
+    def add_one_bookmark(self,
+                         title,
+                         page,
+                         parent=None,
+                         color=None,
+                         fit='/Fit'):
         '''
         往PDF文件中添加单条书签，并且保存为一个新的PDF文件
         :param str title: 书签标题
@@ -101,8 +104,11 @@ class MyPDFHandler(object):
         :param str fit: 跳转到书签页后的缩放方式
         :return: bookmark
         '''
-        bm = self.__writeable_pdf.addBookmark(
-            title, page - 1, parent=parent, color=color, fit=fit)
+        bm = self.__writeable_pdf.addBookmark(title,
+                                              page - 1,
+                                              parent=parent,
+                                              color=color,
+                                              fit=fit)
         return bm
 
     def add_bookmarks(self, bookmarks, max_parent):
@@ -111,12 +117,12 @@ class MyPDFHandler(object):
         :param bookmarks: 书签元组列表，其中的页码表示的是PDF中的绝对页码，值为1表示第一页
         :return: None
         '''
-        parents = [None] * (max_parent+2)
+        parents = [None] * (max_parent + 2)
         for title, page, index in bookmarks:
             bm = self.add_one_bookmark(title, page, parent=parents[index])
-            parents[index+1] = bm
-        print('add_bookmarks success! add {0} pieces of bookmarks to PDF file'.format(
-            len(bookmarks)))
+            parents[index + 1] = bm
+        print('add_bookmarks success! add {0} pieces of bookmarks to PDF file'.
+              format(len(bookmarks)))
 
     def read_bookmarks_from_txt(self, txt_file_path, page_offset=0):
         '''
@@ -135,8 +141,10 @@ class MyPDFHandler(object):
                 line = line.rstrip()
                 if not line:
                     continue
+                if '@' not in line:
+                    log('WARN', "No `@` in line", line, i)
+                    continue
                 # 以'@'作为标题、页码分隔符
-                # print('read line is: {0}'.format(line))
                 try:
                     title = line.split('@')[0].rstrip().replace('\t', '    ')
                     page = line.split('@')[1].strip()
@@ -145,7 +153,7 @@ class MyPDFHandler(object):
                     continue
                 # title和page都不为空才添加书签，否则不添加
                 if title and page:
-                    index = int(len(re.findall(r"^[ ]*", title)[0])/4)
+                    index = int(len(re.findall(r"^[ ]*", title)[0]) / 4)
                     if index > max_parent:
                         max_parent = index
                     try:
@@ -153,7 +161,8 @@ class MyPDFHandler(object):
                         if title.strip().count(' ') > 1:
                             if re.search(r"[a-zA-z]", line):
                                 if title.strip().count(' ') > 2:
-                                    log('WARN', 'seems too many blanks', line, i)
+                                    log('WARN', 'seems too many blanks', line,
+                                        i)
                             else:
                                 log('WARN', 'seems too many blanks', line, i)
                         bookmarks.append((title.strip(), page, index))
@@ -167,10 +176,10 @@ class MyPDFHandler(object):
         '''
         通过读取书签列表信息文本文件，将书签批量添加到PDF文件中
         :param txt_file_path: 书签列表信息文本文件
-        :param page_offset: 页码便宜量，为0或正数，即由于封面、目录等页面的存在，在PDF中实际的绝对页码比在目录中写的页码多出的差值
+        :param page_offset: 页码偏移量，为0或正数，即由于封面、目录等页面的存在，在PDF中实际的绝对页码比在目录中写的页码多出的差值
         :return: None
         '''
         bookmarks, max_parent = self.read_bookmarks_from_txt(
             txt_file_path, page_offset)
         self.add_bookmarks(bookmarks, max_parent)
-        print('add_bookmarks_by_read_txt success!')
+        # print('add_bookmarks_by_read_txt success!')
