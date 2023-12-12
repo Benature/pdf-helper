@@ -1,6 +1,7 @@
 from PyPDF2 import PdfFileReader
 import configparser
 import os
+from pathlib import Path
 
 from utils import path_split, check_conf_file, conf_path
 
@@ -31,11 +32,11 @@ if __name__ == '__main__':
 
     cf.read(conf_path)
 
-    file_path = cf.get('get', 'pdf_path')
+    file_path = Path(cf.get('get', 'pdf_path'))
 
     reader = PdfFileReader(file_path)
     bookmarks = bookmark_dict(reader.getOutlines())
 
     _, file_name, _ = path_split(file_path)
-    with open(os.path.join('bookmarks', file_name + '.txt'), 'w') as f:
+    with open(os.path.join('bookmarks', file_path.stem + '.txt'), 'w') as f:
         f.write(write_bookmark(bookmarks))

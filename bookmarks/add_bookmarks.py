@@ -1,19 +1,17 @@
 from utils import PDFHandler, PDFHandleMode as mode
-from utils import path_split, open_pdf
+from utils import open_pdf
 from utils import root_path, check_conf_file, conf_path
 import configparser
 import os
 import re
+from pathlib import Path
 
 
 def main():
-    cf = configparser.ConfigParser()  # config
-
-    # ATTENTION: 您可能需要修改这里的路径
-    cf.read(conf_path)
-
     # read config
-    pdf_path = cf.get('add', 'pdf_path')
+    cf = configparser.ConfigParser()  # config
+    cf.read(conf_path)
+    pdf_path = Path(cf.get('add', 'pdf_path'))
     bookmark_file_path = cf.get('add', 'bookmark_file_path')
     page_offset = cf.getint('add', 'page_offset')
 
@@ -25,10 +23,9 @@ def main():
             print(f"Read from bookmark meta: {bm_meta[0]}")
             page_offset = bm_cf.getint('meta', 'offset')
 
-    new_pdf_file_path = cf.get(
-        'add',
-        'new_pdf_file_name',
-        fallback=root_path / 'output' / path_split(pdf_path)[1] + '.pdf')
+    new_pdf_file_path = cf.get('add',
+                               'new_pdf_file_name',
+                               fallback=root_path / 'output' / pdf_path.name)
 
     # operate pdf bookmarks
     pdf_handler = PDFHandler(pdf_path, mode=mode.NEWLY)

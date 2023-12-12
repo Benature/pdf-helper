@@ -102,7 +102,7 @@ class PDFHandler(object):
         new_file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(new_file_path, 'wb') as f:
             self.__writeable_pdf.write(f)
-        print(f'Save to new file: {new_file_path}')
+        print(f'Save to new file: {str(new_file_path)}')
 
     def add_one_bookmark(self,
                          title,
