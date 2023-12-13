@@ -1,6 +1,6 @@
 # 书签操作
 
-复制 `info_sample.conf` 为 `info.conf`（如果不做代码也会自动复制），请在该文件中配置好信息（如 pdf 文件路径等）。
+复制 `sample/info.conf` 为 `info.conf`（如果不做代码也会自动复制），请在该文件中配置好信息（如 pdf 文件路径等）。
 
 ## 导出书签
 
@@ -18,6 +18,6 @@ refer in [`add_bookmarks.py`](./add_bookmarks.py)
 
 </br>
 <p align="center">
-  <img src="./compare.png" width="70%"/>
+  <img src="./sample/compare.png" width="70%"/>
 </p>
 <p align="center">效果对比（左旧右新）</p>

@@ -3,6 +3,7 @@ from utils import root_path, conf_path
 import configparser
 import re
 from pathlib import Path
+from shutil import copyfile
 
 
 def main():
@@ -23,7 +24,8 @@ def main():
 
     new_pdf_file_path = cf.get('add',
                                'new_pdf_file_name',
-                               fallback=root_path / 'output' / pdf_path.name)
+                               fallback=pdf_path.parent /
+                               f"{pdf_path.stem}-TOC.pdf")
 
     # operate pdf bookmarks
     pdf_handler = PDFHandler(pdf_path, 'newly')
@@ -31,8 +33,17 @@ def main():
                                           page_offset=page_offset)
     pdf_handler.save(new_pdf_file_path)
 
+    save_history(pdf_path, bookmark_file_path, new_pdf_file_path)
+
     if cf.getboolean('add', 'auto_open', fallback=False):
         open_pdf(new_pdf_file_path)
+
+
+def save_history(pdf_path, bookmark_file_path, new_pdf_file_path):
+    history_dir = root_path / 'history'
+    history_dir.mkdir(parents=True, exist_ok=True)
+    copyfile(bookmark_file_path, history_dir / f"{pdf_path.stem}.txt")
+    copyfile(new_pdf_file_path, history_dir / f"{pdf_path.stem}-TOC.pdf")
 
 
 if __name__ == '__main__':

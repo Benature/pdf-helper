@@ -6,3 +6,5 @@
 !/bookmarks/bookmarks/.gitkeep
 /bookmarks/output
 /bookmarks/info.conf
+/bookmarks/bookmark.txt
+/bookmarks/history/*
