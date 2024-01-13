@@ -24,9 +24,10 @@ refer in [`add_bookmarks.py`](./add_bookmarks.py)
 
 代码参考了[前人工作](https://www.jianshu.com/p/1aac3ae4d620)，我主要改了以下地方：
 
-- 原版是 python2 版本的，改成了 python3（如`print`、`parseconfig`）
 - 支持**书签嵌套**（参考下图示例）
 - 检测书签标题是否含有多余空格并警告
+- 原版是 python2 版本的，改成了 python3（如`print`、`parseconfig`）
+- PyPDF 从 2.0 到 3.0，如 `PdfFileReader`、`PdfFileWriter` 被弃用
 
 </br>
 <p align="center">

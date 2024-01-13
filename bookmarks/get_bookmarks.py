@@ -8,29 +8,35 @@ import argparse
 from utils import check_conf_file, conf_path
 
 
-def bookmark_dict(bookmark_list, level=1):
+def bookmark_dict(bookmark_list, level=1, idx=None):
     '''return dict of bookmarks
     ref: https://stackoverflow.com/questions/54303318/read-all-bookmarks-from-a-pdf-document-and-create-a-dictionary-with-pagenumber-a
     '''
+    idx = [] if idx is None else idx
     result = []
+    i = 1
     for item in bookmark_list:
+        idx_tmp = idx + [str(i)]
         if isinstance(item, list):
-            result += bookmark_dict(item, level + 1)
+            result += bookmark_dict(item, level + 1, idx_tmp)
         else:
+            # idx_tmp = idx + [str(i + 1)]
             page_num = 1 + reader.getDestinationPageNumber(item)
-            result.append((item.title, page_num, level))
+            result.append((item.title, page_num, level, idx_tmp))
+            i += 1
     return result
 
 
 def gen_bookmark_content(bookmarks, sep="", md=False, depth=-1, min_level=1):
-    max_level = min_level + depth if depth > 0 else -1
+    max_level = min_level + depth - 1 if depth > 0 else -1
     sep = eval(f'"{sep}"')
 
     content = ''
-    for title, page, level in bookmarks:
+    for title, page, level, idx_list in bookmarks:
         if md:
             if level >= min_level and (max_level == -1 or level <= max_level):
-                content += f"{'#'*(level-min_level+1)} {title}{sep}\n"
+                idx = ".".join(idx_list[min_level - 1:])
+                content += f"{'#'*(level-min_level+1)} {idx} {title}{sep}\n"
         else:
             content += f"{title} @{page}{sep}\n"
 
@@ -57,7 +63,6 @@ if __name__ == '__main__':
     file_path = Path(file_path)
     reader = PdfReader(file_path)
     bookmarks = bookmark_dict(reader.getOutlines())
-
     bm_content = gen_bookmark_content(bookmarks, args.sep, args.md, args.depth,
                                       args.min)
 
