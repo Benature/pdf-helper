@@ -6,6 +6,17 @@
 
 refer in [`get_bookmarks.py`](./get_bookmarks.py)
 
+```py
+python get_bookmarks.py <path> [--md --min <int> --depth <int> --sep <str>]
+```
+
+- `path`: PDF 路径
+- `--md`: 是否以 Markdown 格式输出
+  - `--min`: 目录最小层级
+  - `--depth`: 目录遍历（生成）深度（级数）
+  - `--sep`: 每行之间间隔字符，如`\n`
+
+
 ## 批量导入书签
 
 refer in [`add_bookmarks.py`](./add_bookmarks.py)
