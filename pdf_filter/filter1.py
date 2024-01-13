@@ -6,7 +6,7 @@
 import os
 import numpy as np
 from pdf2image import convert_from_path
-from PyPDF2 import PdfFileWriter, PdfFileReader  
+from PyPDF2 import PdfWriter, PdfReader
 
 # ========== Config ==================
 file_path = "path/to/lec/pdf"
@@ -22,11 +22,11 @@ def diff_rate(arrs, ind):
 def splitPdf(file_path, pages):
     assert file_path[-4:] == '.pdf'
     root_path, file_name = get_dir_name(file_path)
-    output = PdfFileWriter() 
-    pdf_raw = PdfFileReader(open(file_path, "rb")) 
-    for i in pages: 
-        output.addPage(pdf_raw.getPage(i)) 
-    outputStream = open(root_path + "[s]" + file_name, "wb") 
+    output = PdfWriter()
+    pdf_raw = PdfReader(open(file_path, "rb"))
+    for i in pages:
+        output.addPage(pdf_raw.getPage(i))
+    outputStream = open(root_path + "[s]" + file_name, "wb")
     output.write(outputStream)
 
 

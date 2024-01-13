@@ -1,5 +1,5 @@
 # coding:utf-8
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 import os
 import re
 import subprocess
@@ -53,7 +53,7 @@ class PDFHandler(object):
         :param mode: 处理PDF文件的模式，默认为PDFHandleMode.COPY模式
         '''
         # 只读的PDF对象
-        self.__pdf = PdfFileReader(pdf_file_path)
+        self.__pdf = PdfReader(pdf_file_path)
 
         # 获取PDF文件名（不带路径）
         self.file_name = os.path.basename(pdf_file_path)
@@ -65,7 +65,7 @@ class PDFHandler(object):
         self.pages_num = self.__pdf.getNumPages()
 
         # 可写的PDF对象，根据不同的模式进行初始化
-        self.__writeable_pdf = PdfFileWriter()
+        self.__writeable_pdf = PdfWriter()
         if mode == 'copy':  # 保留源PDF文件的所有内容和信息，在此基础上修改
             self.__writeable_pdf.cloneDocumentFromReader(self.__pdf)
         elif mode == 'newly':  # 仅保留源PDF文件的页面内容，在此基础上修改

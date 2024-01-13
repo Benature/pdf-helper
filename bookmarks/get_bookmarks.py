@@ -1,4 +1,4 @@
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 import configparser
 import os
 import sys
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         file_path = sys.argv[1]
 
     file_path = Path(file_path)
-    reader = PdfFileReader(file_path)
+    reader = PdfReader(file_path)
     bookmarks = bookmark_dict(reader.getOutlines())
 
     with open(Path('history', f'{file_path.stem}.txt'), 'w') as f:
