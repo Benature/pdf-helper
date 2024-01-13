@@ -7,10 +7,11 @@
 refer in [`get_bookmarks.py`](./get_bookmarks.py)
 
 ```py
-python get_bookmarks.py <path> [--md --min <int> --depth <int> --sep <str>]
+python get_bookmarks.py <path> [--quiet --md --min <int> --depth <int> --sep <str>]
 ```
 
 - `path`: PDF 路径
+- `--quiet`: 不要打印、复制，即仅写入 history 文件夹下的 txt 文件
 - `--md`: 是否以 Markdown 格式输出
   - `--min`: 目录最小层级
   - `--depth`: 目录遍历（生成）深度（级数）

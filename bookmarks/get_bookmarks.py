@@ -22,7 +22,7 @@ def bookmark_dict(bookmark_list, level=1):
     return result
 
 
-def write_bookmark_txt(bookmarks, sep="", md=False, depth=-1, min_level=1):
+def gen_bookmark_content(bookmarks, sep="", md=False, depth=-1, min_level=1):
     max_level = min_level + depth if depth > 0 else -1
     sep = eval(f'"{sep}"')
 
@@ -33,6 +33,7 @@ def write_bookmark_txt(bookmarks, sep="", md=False, depth=-1, min_level=1):
                 content += f"{'#'*(level-min_level+1)} {title}{sep}\n"
         else:
             content += f"{title} @{page}{sep}\n"
+
     return content
 
 
@@ -42,6 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--depth', '-d', type=int, default=-1)
     parser.add_argument('--min', '-m', type=int, default=1)
     parser.add_argument('--sep', '-s', type=str, default="")
+    parser.add_argument('--quiet', '-q', action="store_true")
     if len(sys.argv) == 1:
         check_conf_file()
         cf = configparser.ConfigParser()
@@ -56,7 +58,13 @@ if __name__ == '__main__':
     reader = PdfReader(file_path)
     bookmarks = bookmark_dict(reader.getOutlines())
 
+    bm_content = gen_bookmark_content(bookmarks, args.sep, args.md, args.depth,
+                                      args.min)
+
     with open(Path('history', f'{file_path.stem}.txt'), 'w') as f:
-        f.write(
-            write_bookmark_txt(bookmarks, args.sep, args.md, args.depth,
-                               args.min))
+        f.write(bm_content)
+
+    if not args.quiet:
+        print(bm_content)
+        import richxerox
+        richxerox.copy(text=bm_content)
