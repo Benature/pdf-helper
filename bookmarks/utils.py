@@ -58,11 +58,11 @@ class PDFHandler(object):
         # 获取PDF文件名（不带路径）
         self.file_name = os.path.basename(pdf_file_path)
         #
-        self.metadata = self.__pdf.getXmpMetadata()
+        self.metadata = self.__pdf.xmp_metadata
         #
-        self.doc_info = self.__pdf.getDocumentInfo()
+        self.doc_info = self.__pdf.metadata
         #
-        self.pages_num = self.__pdf.getNumPages()
+        self.pages_num = len(self.__pdf.pages)
 
         # 可写的PDF对象，根据不同的模式进行初始化
         self.__writeable_pdf = PdfWriter()
@@ -70,8 +70,8 @@ class PDFHandler(object):
             self.__writeable_pdf.cloneDocumentFromReader(self.__pdf)
         elif mode == 'newly':  # 仅保留源PDF文件的页面内容，在此基础上修改
             for idx in range(self.pages_num):
-                page = self.__pdf.getPage(idx)
-                self.__writeable_pdf.insertPage(page, idx)
+                page = self.__pdf.pages[idx]
+                self.__writeable_pdf.insert_page(page, idx)
 
     def save(self, new_file_path):
         '''
@@ -103,11 +103,11 @@ class PDFHandler(object):
         :param str fit: 跳转到书签页后的缩放方式
         :return: bookmark
         '''
-        bm = self.__writeable_pdf.addBookmark(title,
+        bm = self.__writeable_pdf.add_outline_item(title,
                                               page - 1,
                                               parent=parent,
                                               color=color,
-                                              fit=fit)
+                                              )
         return bm
 
     def add_bookmarks(self, bookmarks, max_parent):
