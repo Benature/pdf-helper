@@ -66,10 +66,15 @@ if __name__ == '__main__':
     bm_content = gen_bookmark_content(bookmarks, args.sep, args.md, args.depth,
                                       args.min)
 
-    with open(Path('history', f'{file_path.stem}.txt'), 'w') as f:
+    output_path = Path('history', f'{file_path.stem}.txt')
+    with open(output_path, 'w') as f:
         f.write(bm_content)
 
     if not args.quiet:
         print(bm_content)
-        import richxerox
-        richxerox.copy(text=bm_content)
+        try:
+            import richxerox
+            richxerox.copy(text=bm_content)
+        except:
+            pass
+    print("Writing file to", str(output_path.resolve()))

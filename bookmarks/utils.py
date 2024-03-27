@@ -103,11 +103,12 @@ class PDFHandler(object):
         :param str fit: 跳转到书签页后的缩放方式
         :return: bookmark
         '''
-        bm = self.__writeable_pdf.add_outline_item(title,
-                                              page - 1,
-                                              parent=parent,
-                                              color=color,
-                                              )
+        bm = self.__writeable_pdf.add_outline_item(
+            title,
+            page - 1,
+            parent=parent,
+            color=color,
+        )
         return bm
 
     def add_bookmarks(self, bookmarks, max_parent):
