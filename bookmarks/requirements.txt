@@ -1,0 +1,4 @@
+PyPDF2>=3.0.0
+richxerox
+configparser
+pathlib

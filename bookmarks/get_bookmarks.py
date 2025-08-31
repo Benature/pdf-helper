@@ -21,7 +21,7 @@ def bookmark_dict(bookmark_list, level=1, idx=None):
             result += bookmark_dict(item, level + 1, idx_tmp)
         else:
             # idx_tmp = idx + [str(i + 1)]
-            page_num = 1 + reader.getDestinationPageNumber(item)
+            page_num = 1 + reader.get_destination_page_number(item)
             result.append((item.title, page_num, level, idx_tmp))
             i += 1
     return result
@@ -55,6 +55,8 @@ if __name__ == '__main__':
         cf = configparser.ConfigParser()
         cf.read(conf_path)
         file_path = cf.get('get', 'pdf_path')
+        # 设置默认参数
+        args = argparse.Namespace(md=False, depth=-1, min=1, sep="", quiet=False)
     else:
         parser.add_argument('path', type=str)
         args = parser.parse_args()
@@ -62,7 +64,7 @@ if __name__ == '__main__':
 
     file_path = Path(file_path)
     reader = PdfReader(file_path)
-    bookmarks = bookmark_dict(reader.getOutlines())
+    bookmarks = bookmark_dict(reader.outline)
     bm_content = gen_bookmark_content(bookmarks, args.sep, args.md, args.depth,
                                       args.min)
 
